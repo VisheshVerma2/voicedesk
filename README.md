@@ -140,52 +140,6 @@ Dashboard opens at `http://localhost:3000`
 
 ---
 
-## 🔥 Firestore Data Schema
-
-### `bookings` collection
-```json
-{
-  "id": "auto",
-  "name": "Rahul Sharma",
-  "phone": "+91-9876543210",
-  "date": "2024-09-15",
-  "time": "10:30",
-  "reason": "Fever and cold",
-  "callId": "vapi-call-id",
-  "status": "confirmed",
-  "createdAt": "ISO timestamp"
-}
-```
-
-### `callLogs` collection
-```json
-{
-  "id": "auto",
-  "callId": "vapi-call-id",
-  "phoneNumber": "+91-9876543210",
-  "intent": "booking",
-  "transcript": [{ "role": "assistant", "content": "Hello..." }],
-  "summary": "Patient booked appointment for...",
-  "duration": 120,
-  "status": "completed",
-  "bookingId": "firestore-booking-id",
-  "createdAt": "ISO timestamp"
-}
-```
-
-### `handoffs` collection
-```json
-{
-  "id": "auto",
-  "callId": "vapi-call-id",
-  "phoneNumber": "+91-9876543210",
-  "name": "Priya Singh",
-  "question": "Asking about MRI results",
-  "status": "pending",
-  "createdAt": "ISO timestamp"
-}
-```
-
 ---
 
 ## 🚀 Deployment
@@ -204,29 +158,6 @@ cd frontend
 npm run build
 npx vercel deploy
 # Set REACT_APP_API_URL=https://your-railway-url.railway.app
-```
-
----
-
-## 📝 Resume Bullet
-
-```
-VoiceDesk | Founder & Developer | Vapi.ai, OpenAI GPT-4, Node.js, Firebase, Google Calendar API
-Built an AI voice agent for clinic appointment booking handling inbound calls end-to-end —
-real-time calendar availability checks, Firestore persistence, FAQ resolution, and human
-handoff logging. Includes a React dashboard for booking management and call transcript review.
-```
-
----
-
-## 🎥 Demo Video Script (30 seconds)
-
-1. **0–5s**: Show dashboard overview — stats, today's schedule
-2. **5–15s**: Call the Vapi number on phone, book an appointment live
-3. **15–22s**: Switch to Appointments tab — new booking appears in real-time
-4. **22–28s**: Open call log — show transcript of the just-completed call
-5. **28–30s**: Google Calendar on side — appointment visible there too
-
 ---
 
 ## ❓ FAQ / Troubleshooting

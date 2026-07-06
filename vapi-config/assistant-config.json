@@ -1,0 +1,119 @@
+{
+  "_readme": "Paste this config when creating your assistant in Vapi dashboard (dashboard.vapi.ai > Assistants > Create)",
+
+  "name": "VoiceDesk - MediCare Clinic",
+  "model": {
+    "provider": "openai",
+    "model": "gpt-4",
+    "temperature": 0.4,
+    "systemPrompt": "You are Priya, a warm and professional voice assistant for MediCare Clinic in Lucknow. You speak in clear, simple English. Your job is to:\n1. Help patients book appointments\n2. Answer common questions about the clinic\n3. When you cannot answer, politely log a handoff for a human to call back\n\nGuidelines:\n- Always greet warmly and ask how you can help\n- For bookings: collect name, preferred date, preferred time, and reason for visit\n- Always call check_availability before confirming any date/time\n- Call confirm_booking only after the patient confirms the slot\n- For questions about the clinic, always call answer_faq\n- If a question is very specific or sensitive (e.g. medical advice, pricing for rare tests), call log_handoff\n- Never give medical advice — only administrative help\n- Keep responses short and conversational — this is a phone call\n- Speak numbers and dates naturally: say 'September fifteenth' not '09-15'\n- At the end of every call, ask if there is anything else you can help with\n\nClinic hours: Monday to Saturday, 9 AM to 6 PM\nClinic name: MediCare Clinic\nLocation: 12B Medical Complex, Hazratganj, Lucknow"
+  },
+  "voice": {
+    "provider": "11labs",
+    "voiceId": "21m00Tcm4TlvDq8ikWAM",
+    "stability": 0.5,
+    "similarityBoost": 0.75
+  },
+  "firstMessage": "Hello! Thank you for calling MediCare Clinic. I'm Priya, your virtual assistant. How can I help you today? Are you looking to book an appointment, or do you have a question about our services?",
+  "endCallMessage": "Thank you for calling MediCare Clinic. We look forward to seeing you. Have a wonderful day, and take care!",
+  "transcriber": {
+    "provider": "deepgram",
+    "model": "nova-2",
+    "language": "en-IN"
+  },
+  "functions": [
+    {
+      "name": "check_availability",
+      "description": "Check available appointment slots on a given date. Call this before offering or confirming any time slot.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "The date to check availability for in ISO format YYYY-MM-DD. Convert what the patient says (e.g. 'September 15th') to this format using the current year."
+          }
+        },
+        "required": ["date"]
+      }
+    },
+    {
+      "name": "confirm_booking",
+      "description": "Confirm and save an appointment after the patient has agreed on a date and time.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Full name of the patient"
+          },
+          "date": {
+            "type": "string",
+            "description": "Appointment date in YYYY-MM-DD format"
+          },
+          "time": {
+            "type": "string",
+            "description": "Appointment time in HH:MM 24-hour format (e.g. 10:30)"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Reason for visit or type of consultation"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Patient's phone number if provided"
+          }
+        },
+        "required": ["name", "date", "time"]
+      }
+    },
+    {
+      "name": "answer_faq",
+      "description": "Answer a question about the clinic — hours, fees, doctors, location, insurance, etc.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string",
+            "description": "The patient's question exactly as they asked it"
+          },
+          "patient_name": {
+            "type": "string",
+            "description": "Patient name if already collected, otherwise leave blank"
+          }
+        },
+        "required": ["question"]
+      }
+    },
+    {
+      "name": "log_handoff",
+      "description": "Log a handoff when you cannot answer a question and need a human to call back. Use this for unanswerable medical or specific questions.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Patient's name"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Patient's callback phone number"
+          },
+          "question": {
+            "type": "string",
+            "description": "The question or issue that needs human follow-up"
+          }
+        },
+        "required": ["question"]
+      }
+    }
+  ],
+  "serverUrl": "YOUR_BACKEND_URL/api/vapi/webhook",
+  "serverUrlSecret": "YOUR_VAPI_WEBHOOK_SECRET",
+  "recordingEnabled": true,
+  "endCallFunctionEnabled": true,
+  "dialKeypadFunctionEnabled": false,
+  "fillersEnabled": true,
+  "silenceTimeoutSeconds": 30,
+  "maxDurationSeconds": 600,
+  "backgroundSound": "off"
+}
